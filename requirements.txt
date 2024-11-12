@@ -1,0 +1,6 @@
+numpy
+pandas
+langchain
+langchain_openai
+langchain_mistralai
+langchain_anthropic
