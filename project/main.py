@@ -135,14 +135,14 @@ def _construct_clients() -> List[Union[ChatMistralAI, ChatOpenAI, ChatAnthropic]
     """
     client_list = []
     logger.info("Constructing clients for all models...")
-    # for model_code in MISTRAL_MODELS:
-    #     try:
-    #         client = ChatMistralAI(model=model_code)
-    #         client_list.append(client)
-    #         logger.info(f"Constructed MistralAI client for model '{model_code}'.")
-    #     except Exception as e:
-    #         logger.error(f"Error creating MistralAI client for model '{model_code}': {e}")
-    #         continue
+    for model_code in MISTRAL_MODELS:
+        try:
+            client = ChatMistralAI(model=model_code)
+            client_list.append(client)
+            logger.info(f"Constructed MistralAI client for model '{model_code}'.")
+        except Exception as e:
+            logger.error(f"Error creating MistralAI client for model '{model_code}': {e}")
+            continue
     for model_code in OPENAI_MODELS:
         try:
             client = ChatOpenAI(model=model_code)
@@ -151,14 +151,14 @@ def _construct_clients() -> List[Union[ChatMistralAI, ChatOpenAI, ChatAnthropic]
         except Exception as e:
             logger.error(f"Error creating OpenAI client for model '{model_code}': {e}")
             continue
-    # for model_code in ANTHROPIC_MODELS:
-    #     try:
-    #         client = ChatAnthropic(model=model_code)
-    #         client_list.append(client)
-    #         logger.info(f"Constructed Anthropic client for model '{model_code}'.")
-    #     except Exception as e:
-    #         logger.error(f"Error creating Anthropic client for model '{model_code}': {e}")
-    #         continue
+    for model_code in ANTHROPIC_MODELS:
+        try:
+            client = ChatAnthropic(model=model_code)
+            client_list.append(client)
+            logger.info(f"Constructed Anthropic client for model '{model_code}'.")
+        except Exception as e:
+            logger.error(f"Error creating Anthropic client for model '{model_code}': {e}")
+            continue
     logger.info(f"Constructed {len(client_list)} clients.")
     return client_list
 
