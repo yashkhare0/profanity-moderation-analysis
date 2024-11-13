@@ -11,7 +11,7 @@ OPENAI_MODELS=[
     "gpt-4o",
     "gpt-4o-mini",
     "o1-preview",
-    "o1-mini"
+    "o1-mini",
     "gpt-4-turbo",
     "gpt-3.5-turbo",
 ]
