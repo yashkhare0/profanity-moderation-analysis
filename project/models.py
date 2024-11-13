@@ -8,12 +8,12 @@ MISTRAL_MODELS =[
 ]
 
 OPENAI_MODELS=[
-    "gpt-4o",
-    "gpt-4o-mini",
+    # "gpt-4o",
+    # "gpt-4o-mini",
     "o1-preview",
     "o1-mini",
-    "gpt-4-turbo",
-    "gpt-3.5-turbo",
+    # "gpt-4-turbo",
+    # "gpt-3.5-turbo",
 ]
 
 ANTHROPIC_MODELS=[
