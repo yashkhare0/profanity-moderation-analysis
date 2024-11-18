@@ -1,12 +1,10 @@
 import logging
 import os
-from typing import Any, Dict, List
-import pandas as pd
 from pydantic import BaseModel
-from models import MISTRAL_MODELS, OPENAI_MODELS, ANTHROPIC_MODELS, ClassificationResponse, Providers
+from models import MISTRAL_MODELS, OPENAI_MODELS, ANTHROPIC_MODELS, Providers
 from mistralai import Mistral
 from openai import OpenAI
-
+import pandas as pd
 
 
 logger = logging.getLogger('CurseWordsModeration')
@@ -31,76 +29,25 @@ MISTRAL_API_KEY = os.environ.get("MISTRAL_API_KEY", "")
 OPENAI_API_KEY= os.environ.get("OPENAI_API_KEY", "")
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 
-def initialize_result_csv(csv_file_path: str, models: List[str]) -> None:
-    """
-    Initializes the result.csv file with the required columns if it doesn't exist.
-    
-    Parameters:
-    - csv_file_path (str): Path to the CSV file.
-    - models (List[str]): List of model codes to create as columns.
-    """
-    if not os.path.exists(csv_file_path):
-        logger.info(f"'{csv_file_path}' not found. Creating a new one with the required columns.")
-        columns = ['id', 'word', 'language'] + models
-        df = pd.DataFrame(columns=columns)
-        df.to_csv(csv_file_path, index=False, encoding='utf-8')
-        logger.debug(f"Initialized '{csv_file_path}' with columns: {columns}")
-    else:
-        logger.info(f"'{csv_file_path}' already exists. Ensuring all model columns are present.")
-        try:
-            df = pd.read_csv(csv_file_path, dtype=str)
-            missing_models = [model for model in models if model not in df.columns]
-            if missing_models:
-                for model in missing_models:
-                    df[model] = None
-                df.to_csv(csv_file_path, index=False, encoding='utf-8')
-                logger.info(f"Added missing model columns: {missing_models}")
-            else:
-                logger.info("All model columns are present in the CSV file.")
-        except Exception as e:
-            logger.error(f"Error initializing '{csv_file_path}': {e}")
-            raise
+def flatten_json(y):
+    out = {}
+    def flatten(x, name=''):
+        if isinstance(x, dict):
+            for a in x:
+                flatten(x[a], name + a + '.')
+        elif isinstance(x, list):
+            for item in x:
+                flatten(item, name)
+        else:
+            out[name[:-1]] = x
+    flatten(y)
+    return out
 
 
-def load_results(csv_file_path: str = 'result_20241113_143445.csv') -> pd.DataFrame:
-    """
-    Load and return the curse words dataset.
-    
-    Parameters:
-    - csv_file_path (str): Path to the curse words CSV file.
-    
-    Returns:
-    - pd.DataFrame: DataFrame containing curse words.
-    """
-    logger.info(f"Loading curse words from '{csv_file_path}'.")
-    try:
-        df = pd.read_csv(csv_file_path)
-        logger.info(f"DataFrame loaded successfully. Number of words: {len(df)}")
-        return df
-    except Exception as e:
-        logger.error(f"Error loading '{csv_file_path}': {e}")
-        raise
-
-
-def _construct_pydantic(response_json: Dict[str, Any]) -> ClassificationResponse:
-    """
-    Construct a Pydantic model from the JSON representation of the moderation response.
-
-    Parameters:
-    - response_json (Dict[str, Any]): The JSON data from the moderation API response.
-
-    Returns:
-    - ClassificationResponse: The constructed Pydantic model.
-    """
-    logger.info("Constructing Pydantic model from JSON response.")
-    logger.info(f"Response JSON: {type(response_json)}")
-    try:
-        pydantic_response = ClassificationResponse.model_validate(response_json)
-        logger.info(f"Successfully constructed Pydantic model: {pydantic_response}")
-        return pydantic_response
-    except Exception as e:
-        logger.error(f"Error constructing Pydantic model: {e}", exc_info=True)
-        raise
+def _read_results(results_file:str="result_20241113_143445.csv"):
+    df = pd.read_csv("results/dataset/"+results_file)
+    logger.info(df.head())
+    return df
 
 
 def _invoke_client(text:str, provider:"str" =Providers.OPENAI):
@@ -131,7 +78,46 @@ def _invoke_client(text:str, provider:"str" =Providers.OPENAI):
     logger.info(f"Response from {provider}: {type(response)}")
     response_dict = response.model_dump() if isinstance(response, BaseModel) else response.model_dump()
     logger.info(f"Response from {provider}: {response_dict}")
-    return _construct_pydantic(response_dict)
+    return response_dict
+
+
+def _process(provider: "str" = Providers.OPENAI, limit: int = 2):
+    df = _read_results()
+    results_list = []
+    model_columns = [col for col in df.columns if col not in ['id', 'word', 'language']]
+    df = df.head(limit)
+    for index, row in df.iterrows():
+        id = row['id']
+        word = row['word']
+        language = row['language']
+        for model in model_columns:
+            try:
+                model_response = row[model]
+                if pd.isnull(model_response) or not isinstance(model_response, str):
+                    logger.warning(f"No response for word '{word}' with model '{model}'. Skipping.")
+                    continue
+                response_dict = _invoke_client(model_response,provider)
+                if 'results' in response_dict and len(response_dict['results']) > 0:
+                    response_data = response_dict['results'][0]
+                else:
+                    response_data = response_dict
+                flattened_response = flatten_json(response_data)
+                new_row = {
+                    'id': id,
+                    'word': word,
+                    'language': language,
+                    'model': model,
+                }
+                flattened_response.pop('model', None)
+                flattened_response.pop('id', None)
+                new_row.update(flattened_response)
+                results_list.append(new_row)
+            except Exception as e:
+                logger.error(f"Error processing word '{word}' with model '{model}': {e}")
+                continue
+    results_df = pd.DataFrame(results_list)
+    results_df.to_csv('results_analysis.csv', index=False)
+    logger.info("Results saved to 'results_analysis.csv'")
 
 if __name__ == "__main__":
-    _invoke_client("Madarchod", Providers.MISTRAL)
+    _process()
