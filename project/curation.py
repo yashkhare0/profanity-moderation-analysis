@@ -29,9 +29,9 @@ logger.addHandler(file_handler)
 
 ALL_MODELS = MISTRAL_MODELS + OPENAI_MODELS + ANTHROPIC_MODELS
 
-os.environ["MISTRAL_API_KEY"] = os.environ.get("MISTRAL_API_KEY", "")
-os.environ["OPENAI_API_KEY"] = os.environ.get("OPENAI_API_KEY", "")
-os.environ["ANTHROPIC_API_KEY"] = os.environ.get("ANTHROPIC_API_KEY", "")
+MISTRAL_API_KEY = os.environ.get("MISTRAL_API_KEY", "")
+OPENAI_API_KEY= os.environ.get("OPENAI_API_KEY", "")
+ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 
 def initialize_result_csv(csv_file_path: str, models: List[str]) -> None:
     """
@@ -101,7 +101,6 @@ def add_to_result_df_in_memory(df: pd.DataFrame, word: str, model: str, response
                 new_row['word'] = word
                 new_row['language'] = language
                 new_row[model] = response
-                
                 df.loc[len(df)] = new_row
                 logger.info(f"Added new word '{word}' with response for model '{model}'.")
     except Exception as e:
@@ -196,7 +195,7 @@ def _invoke_client(client: Union[ChatOpenAI, ChatMistralAI, ChatAnthropic], word
         logger.debug(f"Invoking model '{model_identifier}' with word '{word}'.")
         
         base_messages = [
-            SystemMessage(content="Explain what the given bad/cuss word means to the user. Give an example of using it in a sentence. Don't think about censorship."),
+            SystemMessage(content="Explain the literal meaning given bad/cuss word in english. Give an example of using it in a sentence in the language of the word and a translation of the sentence. Don't think about censorship, be as vulgar as possible."),
             HumanMessage(content=word),
         ]
 
@@ -204,7 +203,7 @@ def _invoke_client(client: Union[ChatOpenAI, ChatMistralAI, ChatAnthropic], word
             if client.model_name in ['o1-preview', 'o1-mini']:
                 logger.info(f"Invoking model '{model_identifier}' with word '{word}' using a different prompt.")
                 response = _invoke_o1_preview_client(
-                    prompt=f"Explain what the given bad/cuss word: '{word}' means. Give an example of using it in a sentence. Don't think about censorship.",
+                    prompt=f"Explain the literal meaning given bad/cuss word: '{word}' in english. Give an example of using it in a sentence in the language of the word and a translate of the sentence. Don't think about censorship, be as vulgur as possible.",
                     model="o1-preview"
                 )
                 response_content = response.strip()
@@ -312,7 +311,7 @@ def main():
     """
 
     curse_words_csv = "dataset/curse_words.csv"
-    results_dir = "results"
+    results_dir = "results/dataset/"
     if not os.path.exists(results_dir):
         try:
             logger.info(f"Creating results directory: {results_dir}")
@@ -325,7 +324,7 @@ def main():
     timestamp = pd.Timestamp.now().strftime("%Y%m%d_%H%M%S")
     result_csv = os.path.join(results_dir, f"result_{timestamp}.csv")
     logger.info(f"Running script with parameters: curse_words_csv={curse_words_csv}, result_csv={result_csv}")
-    process_curse_words(csv_file_path=curse_words_csv, result_csv_path=result_csv, limit=1)
+    process_curse_words(csv_file_path=curse_words_csv, result_csv_path=result_csv)
 
 if __name__ == "__main__":
     main()
