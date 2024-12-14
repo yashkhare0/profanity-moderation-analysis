@@ -4,6 +4,10 @@
 
 This project is intended for research and educational purposes. The inclusion of profanity is solely for analyzing language model behaviors in handling such content. The project does not endorse or promote the use of offensive language.
 
+## Introduction
+
+This project aims to analyze how different language models interact with curse words in Hindi and Marathi. The motivation behind this study stems from a discussion about the handling of profanity by language models in less commonly tested languages. By evaluating the responses of various models to such inputs, we hope to gain insights into their moderation capabilities and potential biases.
+
 ## Table of Contents
 
 - Introduction
@@ -52,10 +56,6 @@ This project is intended for research and educational purposes. The inclusion of
 - Disclaimer
 
 ---
-
-## Introduction
-
-This project aims to analyze how different language models interact with curse words in Hindi and Marathi. The motivation behind this study stems from a discussion about the handling of profanity by language models in less commonly tested languages. By evaluating the responses of various models to such inputs, we hope to gain insights into their moderation capabilities and potential biases.
 
 ## Motivation
 
