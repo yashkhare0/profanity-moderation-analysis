@@ -1,96 +1,141 @@
-# Curse Words Moderation Analysis Project
+# Local Languages Profanity Responses Analysis : Hindi and Marathi
 
 ## Table of Contents
 
 - Introduction
+- Motivation
 - Objectives
 - Project Structure
 - Installation and Setup
+  - Prerequisites
+  - Clone the Repository
+  - Install Dependencies
+  - Set Up API Keys
 - How to Use
-- Modules and Functions
-  - Loaders
-  - Models
-  - Curate
-  - Analysis
-- Libraries Used
+  - Quick Start
+    1. Prepare the Data
+    2. Run the Curate Script
+    3. Analyze the Results
+    4. View the Results
+- Mistral Integration
+
+- Modules and Packages
+    1. `loaders.py`
+        - Key Functions
+    2. `models.py`
+        - Key Classes and Constants
+    3. `curate.py`
+        - Key Functions and Classes
+    4. `analysis.py`
+        - Key Functions
+
 - Expected File Formats
+    1. Curse Words Dataset (`curse_words.csv`)
+    2. Results Dataset (`result_YYYYMMDD_HHMMSS.csv`)
+    3. HTML Files (`curse_words.html`)
+    4. Text Files (`curse_words.txt`)
+- Libraries Used
+  - Python Standard Libraries
+  - Third-Party Libraries
 - Results
-- Notes and Observations
+- Analysis and Observations
+- Challenges Faced
 - Contributing
 - License
+- Acknowledgements
+- Ethical Considerations
+- Future Work
+- Testing and Continuous Integration
+- Contact Information
+- Disclaimer
+
+---
 
 ## Introduction
 
-This project aims to analyze how different language models interact with curse words in Hindi and Marathi. The motivation behind this study stemmed from a casual discussion about language models' handling of profanity in less commonly tested languages. By evaluating the responses of various models to such inputs, we hope to gain insights into their moderation capabilities and potential biases.
+This project aims to analyze how different language models interact with curse words in Hindi and Marathi. The motivation behind this study stems from a discussion about the handling of profanity by language models in less commonly tested languages. By evaluating the responses of various models to such inputs, we hope to gain insights into their moderation capabilities and potential biases.
+
+## Motivation
+
+Language models have become integral to a wide range of applications, from chatbots to automated content generation. However, the way these models handle profanity, especially in less commonly represented languages like Hindi and Marathi, remains underexplored. Understanding this behavior is crucial for:
+
+- **Improving User Experience**: Ensuring that users are not exposed to inappropriate content.
+- **Enhancing Model Safety**: Preventing the dissemination of harmful or offensive material.
+- **Promoting Inclusivity**: Addressing potential biases that may affect speakers of different languages.
 
 ## Objectives
 
-- To evaluate how different language models respond to curse words in Hindi and Marathi.
-- To assess the moderation capabilities of these models concerning profanity in less commonly represented languages.
-- To collect and analyze data on model responses for further studies or improvements.
+- **Evaluate Responses**: Assess how different language models respond to curse words in Hindi and Marathi.
+- **Assess Moderation Capabilities**: Examine the effectiveness of these models in moderating profanity.
+- **Identify Biases**: Detect any biases in the models' handling of different languages.
+- **Data Collection and Analysis**: Collect comprehensive data on model responses for further studies or improvements.
 
 ## Project Structure
 
-The project is organized into several Python modules, each responsible for specific functionalities:
+The project is organized into several Python modules and directories, each responsible for specific functionalities:
 
-```asx
-├── .venv
-│
-├── project
-│   ├── dataset
-│   │   ├── loaders
+```bash
+curse-words-moderation/
+├── .venv/
+├── project/
+│   ├── dataset/
+│   │   ├── loaders/
 │   │   │   ├── __init__.py
 │   │   │   ├── curse_words.html
 │   │   │   ├── curse_words.txt
 │   │   │   └── loaders.py
-│   │   │
-│   │   ├── results
-│   │   │   ├── analysis
+│   │   ├── results/
+│   │   │   ├── analysis/
 │   │   │   │   ├── __init__.py
-│   │   │   │   └── 20241118_15...
-│   │   │   │
-│   │   │   ├── dataset
+│   │   │   │   └── analysis_results.csv
+│   │   │   ├── dataset/
 │   │   │   │   ├── __init__.py
-│   │   │   │   ├── result_202411...
-│   │   │   │   ├── result_202411...
-│   │   │   │   ├── result_202411...
-│   │   │   │   └── result_202411...
-│   │   │   │
+│   │   │   │   ├── result_YYYYMMDD_HHMMSS.csv
+│   │   │   │   └── ...
 │   │   │   ├── __init__.py
 │   │   │   ├── analysis.py
 │   │   │   ├── curate.py
 │   │   │   └── models.py
-│   │   │
-│   │   └── results_analysis...
-│   │
 │   ├── .gitignore
-│   │
-│   └── README...
-│
-└── requirements...
+│   └── README.md
+├── requirements.txt
+└── project.log
 ```
 
 ## Installation and Setup
 
 ### Prerequisites
 
-- Python 3.7 or higher
-- Git (for cloning the repository)
+- **Python 3.7 or higher**
+- **Git**
+- **API Keys** for the language models you intend to use:
+  - Mistral AI
+  - OpenAI
+  - Anthropic
 
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/curse-words-moderation.git
-cd curse-words-moderation
+git clone https://github.com/yashkhare0/profanity-moderation-analysis.git
+cd profanity-moderation-analysis
 ```
 
 ### Install Dependencies
 
-Create a virtual environment (optional but recommended):
+It is recommended to create a virtual environment to avoid package conflicts.
+
+#### On macOS/Linux
 
 ```bash
-python -m venv venv
-source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+#### On Windows
+
+```cmd
+python -m venv .venv
+.venv\Scripts\activate
 ```
 
 Install the required packages:
@@ -101,14 +146,9 @@ pip install -r requirements.txt
 
 ### Set Up API Keys
 
-Ensure you have the necessary API keys for the language models you intend to use:
+Set the necessary API keys as environment variables.
 
-- **Mistral AI**: Set the `MISTRAL_API_KEY` environment variable.
-- **OpenAI**: Set the `OPENAI_API_KEY` environment variable.
-- **Anthropic**: Set the `ANTHROPIC_API_KEY` environment variable.
- environment variable.
-
-You can set environment variables in your terminal:
+#### macOS/Linux
 
 ```bash
 export MISTRAL_API_KEY='your_mistral_api_key'
@@ -116,7 +156,7 @@ export OPENAI_API_KEY='your_openai_api_key'
 export ANTHROPIC_API_KEY='your_anthropic_api_key'
 ```
 
-On Windows:
+#### Windows
 
 ```cmd
 set MISTRAL_API_KEY=your_mistral_api_key
@@ -124,311 +164,267 @@ set OPENAI_API_KEY=your_openai_api_key
 set ANTHROPIC_API_KEY=your_anthropic_api_key
 ```
 
+Alternatively, you can use a `.env` file with [python-dotenv](https://pypi.org/project/python-dotenv/).
+
 ## How to Use
 
-1. **Prepare the Data**: Use loaders.py to generate or update the dataset of curse words.
+### Quick Start
 
-   ```bash
-   python loaders.py
-   ```
+```bash
+# 1. Set API Keys as described above
+# 2. Prepare data:
+python loaders.py
 
-2. **Run the Curate Script**: Invoke the models and collect their responses.
+# 3. Run the main curation:
+python curate.py
 
-    ```bash
-    python curate.py
-    ```
+# 4. Analyze results:
+python analysis.py
 
-3. **Analyze the Results**: Process and analyze the collected data.
+# Check results in results/dataset and results/analysis directories.
+```
 
-   ```bash
-   python analysis.py
-   ```
+### 1. Prepare the Data
 
-4. **View the Results**: Check the CSV results in the `analysis` directory.
+```bash
+python loaders.py
+```
 
-## Modules and Functions
+- Parses `curse_words.html` or `curse_words.txt`.
+- Extracts curse words and languages.
+- Saves data into `curse_words.csv`.
 
+### 2. Run the Curate Script
 
-2. **Analyze the Results**: Process and analyze the collected data.
-loaders.py
+```bash
+python curate.py
+```
 
-Handles loading and preparing the dataset of curse words.
+- Loads curse words from `curse_words.csv`.
+- Invokes each specified language model (including Mistral) with the curse words.
+- Stores responses in `results/dataset/result_YYYYMMDD_HHMMSS.csv`.
 
-3. **View the Results**: Check the `results` directory for CSV files containing the datasets and analysis.
-load_or_create_df()
+### 3. Analyze the Results
 
-: Loads the existing `curse_words.csv` or creates a new DataFrame if it doesn't exist
--
+```bash
+python analysis.py
+```
 
-add_to_final_ds(word, language)
+- Reads collected responses.
+- Invokes moderation APIs to analyze model outputs.
+- Saves processed results to `results/analysis/analysis_YYYYMMDD_HHMMSS.csv`.
 
-### `loaders.py`
+### 4. View the Results
 
-Handles loading and preparing the dataset of curse words.
+Check CSV files in `results/analysis`. Use Excel, Pandas, or Tableau for further analysis.
 
-html_to_csv()
+## Mistral Integration
 
-: Parses an HTML file (`curse_words.html`) and extracts curse words to add them to the dataset.
+This project is designed to work with multiple language models, including Mistral. The `models.py` file defines `MISTRAL_MODELS`, and the environment variable `MISTRAL_API_KEY` is required to invoke Mistral's public API or SDK. In the `curate.py` script, the `_construct_clients()` function creates clients for these models. By running `python curate.py` after setting the `MISTRAL_API_KEY`, you ensure that Mistral’s models are invoked alongside other providers.
 
-#### Key Functions
+If you have Mistral’s public endpoints or SDK, this integration will showcase how their models respond to curse words, allowing you to assess their moderation capabilities and compare them with other providers.
 
-- `load_or_create_df()`: Loads the existing `curse_words.csv` or creates a new DataFrame if it doesn't exist.
-- `add_to_final_ds(word, language)`: Adds a new word and its language to the dataset.
-- `txt_csv()`: Converts curse words from a text file (`curse_words.txt`) to a CSV format.
-- `html_to_csv()`: Parses an HTML file (`curse_words.html`) and extracts curse words to add them to the dataset.
+## Modules and Packages
 
-models.py
+### 1. `loaders.py`
 
-Defines data models and constants used across the project.
+**Key Functions**:
 
-#### Key Classes
+- `load_or_create_df()`
+- `add_to_final_ds(word, language)`
+- `txt_csv()`
+- `html_to_csv()`
 
--
+Usage:
 
-ClassificationObject
+```bash
+python loaders.py
+```
 
-: Represents the categories and scores assigned by the moderation models
--
+### 2. `models.py`
 
-ClassificationResponse
+**Key Classes and Constants**:
 
-#### Usage
+- `ClassificationObject`
+- `ClassificationResponse`
+- `Providers` (Enum: `MISTRAL`, `OPENAI`, `ANTHROPIC`)
 
-: Encapsulates the response from the moderation API.
-Running `loaders.py` will invoke `html_to_csv()` by default:
+**Constants**:
 
-OPENAI
+- `MISTRAL_MODELS`
+- `OPENAI_MODELS`
+- `ANTHROPIC_MODELS`
+- `MODERATION_MODELS`
 
-).
+### 3. `curate.py`
 
-#### Constants
+**Key Functions**:
 
--
+- `initialize_result_csv()`
+- `add_to_result_df_in_memory()`
+- `load_curse_words()`
+- `_construct_clients()`
+- `_invoke_client()`
+- `process_word_model()`
+- `process_curse_words()`
+- `main()`
 
-MISTRAL_MODELS
+Usage:
 
-: List of Mistral AI model names
--
+```bash
+python curate.py
+```
 
-OPENAI_MODELS
+### 4. `analysis.py`
 
-: List of OpenAI model names
--
+**Key Functions**:
 
-### `models.py`
+- `setup_logging()`
+- `flatten_json()`
+- `_read_results()`
+- `_invoke_client()`
+- `process_word_model()`
+- `_process()`
+- `main()`
 
-Defines data models and constants used across the project.
+Usage:
 
-: List of moderation-specific model names.
+```bash
+python analysis.py
+```
 
-###
+## Expected File Formats
 
-#### Key Classes
+### 1. Curse Words Dataset (`curse_words.csv`)
 
-- `ClassificationObject`: Represents the categories and scores assigned by the moderation models.
-- `ClassificationResponse`: Encapsulates the response from the moderation API.
-- `Providers`: Enum listing the available providers (`MISTRAL`, `OPENAI`).
-_construct_clients()
+**Columns**:  
 
-: Constructs instances of clients for all models
--
+- `id`  
+- `word`  
+- `language`
 
-_invoke_client(client, word)
+### 2. Results Dataset (`result_YYYYMMDD_HHMMSS.csv`)
 
-: Invokes a client with a word and returns the response
--
+**Columns**:  
 
-process_word_model(client, word, language)
+- `id`  
+- `word`  
+- `language`  
+- Model-specific response columns
 
-: Processes a single word-model combination
--
+### 3. HTML Files (`curse_words.html`)
 
-process_curse_words(csv_file_path, result_csv_path, limit)
+- Contains curse words in a table.
+- Words are typically in the second `<td>` element.
 
-: Processes all curse words using threading to invoke models concurrently
--
+### 4. Text Files (`curse_words.txt`)
 
-main()
+- One curse word per line.
 
-#### Constants
+## Libraries Used
 
-: The main entry point that starts the curate process.
+### Python Standard Libraries
 
-- `MISTRAL_MODELS`: List of Mistral AI model names.
-- `OPENAI_MODELS`: List of OpenAI model names.
-- `ANTHROPIC_MODELS`: List of Anthropic model names.
-- `MODERATION_MODELS`: List of moderation-specific model names.
+- `os`
+- `logging`
+- `concurrent.futures`
+- `threading`
+- `datetime`
+- `enum`
+- `typing`
+- `pathlib`
 
-setup_logging()
+### Third-Party Libraries
 
-: Sets up the logging configuration
--
+- `pandas`
+- `numpy`
+- `pydantic`
+- `beautifulsoup4 (bs4)`
+- `langchain`
+- `openai`
+- `mistralai`
+- `anthropic`
 
-flatten_json(y)
+Install via:
 
-: Flattens nested JSON objects for easier analysis
--
-
-_read_results(results_file)
-
-: Reads the results dataset from a CSV file
--
-
-_invoke_client(text, provider)
-
-### `curate.py`
-
-Invokes the language models with the curse words and stores their responses
--
-
-_process(provider, limit)
-
-: Processes the dataset and performs moderation checks using a specified provider
--
-
-- `initialize_result_csv(csv_file_path, models)`: Initializes the results CSV with the required columns.
-- `add_to_result_df_in_memory(df, word, model, response, language, lock)`: Adds or updates the response of a model for a given word in the in-memory DataFrame.
-- `load_curse_words(csv_file_path)`: Loads the curse words dataset from a CSV file.
-- `_construct_clients()`: Constructs instances of clients for all models.
-- `_invoke_client(client, word)`: Invokes a client with a word and returns the response.
-- `process_word_model(client, word, language)`: Processes a single word-model combination.
-- `process_curse_words(csv_file_path, result_csv_path, limit)`: Processes all curse words using threading to invoke models concurrently.
-- `main()`: The main entry point that starts the curate process.
-
-: For parallel processing
-  -
-
-threading
-
-: For thread-safe operations.
-
-- `datetime`: For timestamping files and logs.
--
-
-enum
-
-: For enumerations.
-
-- **Third-Party Libraries**
-  -
-
-pandas
-
-: Data manipulation and analysis.
-
-- `numpy`: Numerical computing (required by pandas).
--
-
-pydantic
-
-: Data validation using Python type hints
-  -
-
-bs4
-
- (BeautifulSoup): Parsing HTML documents.
-
-- `fuzzywuzzy`: For string matching and similarity (if used).
-
-- `langchain`: For interacting with language models
-    -
-
-langchain_openai
-
-: OpenAI integration.
-    -
-
-langchain_mistralai
-
-### `analysis.py`
-
-Analyzes the responses collected from the language models.
-
-**Installation**: All the required libraries are specified in the
-
-requirements.txt
-
- file and can be installed using `pip install -r requirements.txt`.
-
-- `setup_logging()`: Sets up the logging configuration.
-- `flatten_json(y)`: Flattens nested JSON objects for easier analysis.
-- `_read_results(results_file)`: Reads the results dataset from a CSV file.
-- `_invoke_client(text, provider)`: Invokes the moderation API client based on the specified provider.
-- `process_word_model(id, word, language, model, model_response, provider)`: Processes a single word-model combination to extract moderation data.
-- `_process(provider, limit)`: Processes the dataset and performs moderation checks using a specified provider.
-- `main()`: The main entry point that starts the analysis process.
-
-in `curse_words.csv`
-  -
-
-word
-
-: The curse word
-  -
-
-language
-
-: The language of the word.
-
-- Model response columns: Each model used will have a column containing the model's response to the word.
-
-### HTML Files (`curse_words.html`)
-
-- An HTML file containing a table of curse words.
-- The words should be in the second `<td>` element of each `<tr>` (excluding the header row).
-
-### Text Files (`curse_words.txt`)
-
-- A plain text file with one curse word per line.
-- Used by
-
-txt_csv()
-
- function in
-
-loaders.py
-
- to convert into a CSV format.
+```bash
+pip install -r requirements.txt
+```
 
 ## Results
 
-*This section will be updated with detailed results and analysis after the project execution is complete.*
-**Note**: By default, the script uses `Providers.OPENAI` for analysis. Modify the `provider` argument in `_process` to change the moderation API provider.
+After running the scripts:
 
-*Specify the project license here, e.g., MIT License.*
+- **Model Responses**: `results/dataset/`
+- **Analysis Results**: `results/analysis/`
 
----
+## Analysis and Observations
 
-*Disclaimer: This project is intended for research and analysis purposes. The use of profanity and curse words is solely for understanding language model behavior and does not reflect the views or intentions of the contributors.*- **Python Standard Libraries**:
+- **Model Effectiveness**
+- **Language Differences**
+- **Moderation Gaps**
 
-- `os`: For interacting with the operating system.
-- `logging`: For logging messages to the console and files.
-- `concurrent.futures`: For parallel processing.
-- `threading`: For thread-safe operations.
-- `datetime`: For timestamping files and logs.
-- `enum`: For enumerations.
-- **Third-Party Libraries**:
-  - `pandas`: Data manipulation and analysis.
-  - `numpy`: Numerical computing (required by pandas).
-  - `pydantic`: Data validation using Python type hints.
-  - `bs4` (BeautifulSoup): Parsing HTML documents.
-  - `fuzzywuzzy`: For string matching and similarity (if used).
-  - `langchain`: For interacting with language models.
-    - `langchain_openai`: OpenAI integration.
-    - `langchain_mistralai`: Mistral AI integration.
-    - `langchain_anthropic`: Anthropic AI integration.
+## Challenges Faced
 
-### Curse Words Dataset (`curse_words.csv`)
+- Data collection complexity.
+- API rate limits and response times.
+- Addressing model biases.
+- Ethical considerations in handling sensitive content.
 
-- **Columns**:
-  - `id`: Integer identifier for each word.
-  - `word`: The curse word.
-  - `language`: The language of the word (e.g., 'hindi', 'marathi').
+## Contributing
 
-### Results Dataset (`result.csv`)
+1. Fork the repository via GitHub.
+2. Create a new branch:
 
-- **Columns**:
-  - `id`: Corresponds to the `id` in `curse_words.csv`.
-  - `word`: The curse word.
-  - `language`: The language of the word.
-  - Model response columns: Each model used will have a column containing the model's response to the word.
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+
+3. Make changes and commit:
+
+   ```bash
+   git commit -m "Description of your changes"
+   ```
+
+4. Push to your fork:
+
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+
+5. Open a pull request on GitHub.
+
+## License
+
+This project is licensed under the MIT License.
+
+## Acknowledgements
+
+- Contributors
+- OpenAI, Mistral AI, Anthropic Documentation
+- Special thanks to library and API developers
+
+## Ethical Considerations
+
+- Responsible handling of profanity.
+- No personal data collected.
+- Aim: Improve moderation and reduce harmful content.
+
+## Future Work
+
+- Expanded language support.
+- Enhanced model improvement with AI providers.
+- User interface development.
+
+## Testing and Continuous Integration
+
+While this project does not currently include formal automated tests, you can test it by running the main scripts (`loaders.py`, `curate.py`, and `analysis.py`) and verifying the generated output files. Consider adding unit tests for data loading and response parsing if you plan to extend this project further. For continuous integration, setting up GitHub Actions or another CI platform to run tests and lint checks on every commit is recommended to maintain code quality over time.
+
+## Contact Information
+
+- Project Maintainer: [Yash Khare](https://github.com/yashkhare0)
+- Email: <yash.khare.work@gmail.com>
+
+## Disclaimer
+
+This project is intended for research and educational purposes. The inclusion of profanity is solely for analyzing language model behaviors in handling such content. The project does not endorse or promote the use of offensive language.
