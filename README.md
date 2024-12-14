@@ -1,5 +1,9 @@
 # Local Languages Profanity Responses Analysis : Hindi and Marathi
 
+## Disclaimer
+
+This project is intended for research and educational purposes. The inclusion of profanity is solely for analyzing language model behaviors in handling such content. The project does not endorse or promote the use of offensive language.
+
 ## Table of Contents
 
 - Introduction
@@ -18,7 +22,6 @@
     3. Analyze the Results
     4. View the Results
 - Mistral Integration
-
 - Modules and Packages
     1. `loaders.py`
         - Key Functions
@@ -28,7 +31,6 @@
         - Key Functions and Classes
     4. `analysis.py`
         - Key Functions
-
 - Expected File Formats
     1. Curse Words Dataset (`curse_words.csv`)
     2. Results Dataset (`result_YYYYMMDD_HHMMSS.csv`)
@@ -424,7 +426,3 @@ While this project does not currently include formal automated tests, you can te
 
 - Project Maintainer: [Yash Khare](https://github.com/yashkhare0)
 - Email: <yash.khare.work@gmail.com>
-
-## Disclaimer
-
-This project is intended for research and educational purposes. The inclusion of profanity is solely for analyzing language model behaviors in handling such content. The project does not endorse or promote the use of offensive language.
