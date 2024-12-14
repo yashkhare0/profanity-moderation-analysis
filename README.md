@@ -409,14 +409,12 @@ This project is licensed under the MIT License.
 ## Ethical Considerations
 
 - Responsible handling of profanity.
-- No personal data collected.
 - Aim: Improve moderation and reduce harmful content.
 
 ## Future Work
 
 - Expanded language support.
 - Enhanced model improvement with AI providers.
-- User interface development.
 
 ## Testing and Continuous Integration
 
