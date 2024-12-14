@@ -1,3 +1,4 @@
+# analysis.py
 import logging
 import os
 from pydantic import BaseModel
@@ -182,4 +183,17 @@ def _process(provider: str = Providers.OPENAI, limit: int = None):
         logger.warning("No results to save.")
 
 if __name__ == "__main__":
+    """
+    Main entry point for the analysis script.
+
+    Indepth Summary of the script:
+    - Read the dataset from a CSV file.
+    - Iterate over each row in the dataset.
+    - For each row, iterate over each model column.
+    - Invoke the moderation API client for the text in the model column.
+    - Process the response from the moderation API.
+    - Flatten the response and create a new row with the processed data.
+    - Save the processed data to a new CSV file.
+    
+    """
     _process(provider=Providers.OPENAI)

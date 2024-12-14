@@ -1,3 +1,4 @@
+#curate.py
 from openai import OpenAI
 import pandas as pd
 import os
@@ -327,4 +328,13 @@ def main():
     process_curse_words(csv_file_path=curse_words_csv, result_csv_path=result_csv)
 
 if __name__ == "__main__":
+    """
+        Main entry point for the curate script.
+            Indepth Summary of the script:
+            - Load the curse words dataset.
+            - Initialize the result.csv file if it doesn't exist.
+            - Construct clients for all models.
+            - Process the curse words dataset using threading.
+            - Save the results to a new CSV file.
+    """
     main()
