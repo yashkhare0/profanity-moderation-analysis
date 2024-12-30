@@ -5,3 +5,5 @@ langchain_openai
 langchain_mistralai
 langchain_anthropic
 mistralai
+bs4
+lxml

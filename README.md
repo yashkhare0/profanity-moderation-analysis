@@ -27,13 +27,13 @@ This project aims to analyze how different language models interact with curse w
     4. View the Results
 - Mistral Integration
 - Modules and Packages
-    1. `loaders.py`
+    1. `load.py`
         - Key Functions
     2. `models.py`
         - Key Classes and Constants
     3. `curate.py`
         - Key Functions and Classes
-    4. `analysis.py`
+    4. `analyse.py`
         - Key Functions
 - Expected File Formats
     1. Curse Words Dataset (`curse_words.csv`)
@@ -85,7 +85,7 @@ curse-words-moderation/
 │   │   │   ├── __init__.py
 │   │   │   ├── curse_words.html
 │   │   │   ├── curse_words.txt
-│   │   │   └── loaders.py
+│   │   │   └── load.py
 │   │   ├── results/
 │   │   │   ├── analysis/
 │   │   │   │   ├── __init__.py
@@ -95,7 +95,7 @@ curse-words-moderation/
 │   │   │   │   ├── result_YYYYMMDD_HHMMSS.csv
 │   │   │   │   └── ...
 │   │   │   ├── __init__.py
-│   │   │   ├── analysis.py
+│   │   │   ├── analyse.py
 │   │   │   ├── curate.py
 │   │   │   └── models.py
 │   ├── .gitignore
@@ -175,13 +175,13 @@ Alternatively, you can use a `.env` file with [python-dotenv](https://pypi.org/p
 ```bash
 # 1. Set API Keys as described above
 # 2. Prepare data:
-python loaders.py
+python load.py
 
 # 3. Run the main curation:
 python curate.py
 
 # 4. Analyze results:
-python analysis.py
+python analyse.py
 
 # Check results in results/dataset and results/analysis directories.
 ```
@@ -189,7 +189,7 @@ python analysis.py
 ### 1. Prepare the Data
 
 ```bash
-python loaders.py
+python load.py
 ```
 
 - Parses `curse_words.html` or `curse_words.txt`.
@@ -209,7 +209,7 @@ python curate.py
 ### 3. Analyze the Results
 
 ```bash
-python analysis.py
+python analyse.py
 ```
 
 - Reads collected responses.
@@ -228,7 +228,7 @@ If you have Mistral’s public endpoints or SDK, this integration will showcase 
 
 ## Modules and Packages
 
-### 1. `loaders.py`
+### 1. `load.py`
 
 **Key Functions**:
 
@@ -240,7 +240,7 @@ If you have Mistral’s public endpoints or SDK, this integration will showcase 
 Usage:
 
 ```bash
-python loaders.py
+python load.py
 ```
 
 ### 2. `models.py`
@@ -277,7 +277,7 @@ Usage:
 python curate.py
 ```
 
-### 4. `analysis.py`
+### 4. `analyse.py`
 
 **Key Functions**:
 
@@ -292,7 +292,7 @@ python curate.py
 Usage:
 
 ```bash
-python analysis.py
+python analyse.py
 ```
 
 ## Expected File Formats
@@ -418,7 +418,7 @@ This project is licensed under the MIT License.
 
 ## Testing and Continuous Integration
 
-While this project does not currently include formal automated tests, you can test it by running the main scripts (`loaders.py`, `curate.py`, and `analysis.py`) and verifying the generated output files. Consider adding unit tests for data loading and response parsing if you plan to extend this project further. For continuous integration, setting up GitHub Actions or another CI platform to run tests and lint checks on every commit is recommended to maintain code quality over time.
+While this project does not currently include formal automated tests, you can test it by running the main scripts (`load.py`, `curate.py`, and `analyse.py`) and verifying the generated output files. Consider adding unit tests for data loading and response parsing if you plan to extend this project further. For continuous integration, setting up GitHub Actions or another CI platform to run tests and lint checks on every commit is recommended to maintain code quality over time.
 
 ## Contact Information
 

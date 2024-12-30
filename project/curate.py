@@ -2,7 +2,6 @@
 from openai import OpenAI
 import pandas as pd
 import os
-import logging
 from typing import List, Tuple, Union
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from langchain_openai import ChatOpenAI
@@ -12,27 +11,19 @@ from models import MISTRAL_MODELS, OPENAI_MODELS, ANTHROPIC_MODELS
 from langchain_core.messages import HumanMessage, SystemMessage
 import threading
 
-logger = logging.getLogger('CurseWordsModeration')
-logger.setLevel(logging.DEBUG)
+from setup import setup_logging
 
-console_handler = logging.StreamHandler()
-console_handler.setLevel(logging.INFO)
-
-file_handler = logging.FileHandler('project.log')
-file_handler.setLevel(logging.DEBUG)
-
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-console_handler.setFormatter(formatter)
-file_handler.setFormatter(formatter)
-
-logger.addHandler(console_handler)
-logger.addHandler(file_handler)
+logger = setup_logging()
 
 ALL_MODELS = MISTRAL_MODELS + OPENAI_MODELS + ANTHROPIC_MODELS
 
 MISTRAL_API_KEY = os.environ.get("MISTRAL_API_KEY", "")
 OPENAI_API_KEY= os.environ.get("OPENAI_API_KEY", "")
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
+
+if not MISTRAL_API_KEY or not OPENAI_API_KEY or not ANTHROPIC_API_KEY:
+    logger.error("API keys are missing. Please set them in the environment variables.")
+    raise ValueError("API keys are missing. Please set them in the environment variables.")
 
 def initialize_result_csv(csv_file_path: str, models: List[str]) -> None:
     """
@@ -311,7 +302,10 @@ def main():
     Main function to execute the processing of curse words.
     """
 
-    curse_words_csv = "dataset/curse_words.csv"
+    dataset_dir = "dataset/"
+    files = [f for f in os.listdir(dataset_dir) if f.endswith('.csv')]
+    latest_file = max(files, key=lambda x: os.path.getctime(os.path.join(dataset_dir, x)))
+    latest_file = os.path.join(dataset_dir, latest_file)
     results_dir = "results/dataset/"
     if not os.path.exists(results_dir):
         try:
@@ -324,8 +318,8 @@ def main():
         logger.info(f"Results directory already exists: {results_dir}")
     timestamp = pd.Timestamp.now().strftime("%Y%m%d_%H%M%S")
     result_csv = os.path.join(results_dir, f"result_{timestamp}.csv")
-    logger.info(f"Running script with parameters: curse_words_csv={curse_words_csv}, result_csv={result_csv}")
-    process_curse_words(csv_file_path=curse_words_csv, result_csv_path=result_csv)
+    logger.info(f"Running script with parameters: curse_words_csv={latest_file}, result_csv={result_csv}")
+    process_curse_words(csv_file_path=latest_file, result_csv_path=result_csv)
 
 if __name__ == "__main__":
     """
